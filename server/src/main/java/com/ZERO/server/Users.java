@@ -1,5 +1,6 @@
 package com.ZERO.server;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
@@ -19,7 +20,7 @@ public class Users {
 	Connection con = null;
 	
 	public Users(){
-		String url = "jdbc:mysql://localhost:3306/mediacenter";
+		String url = "jdbc:mysql://localhost:8001/mediacenter";
 		String Uname = "root";
 		String pwd = "";
 		try {
@@ -32,7 +33,7 @@ public class Users {
 
 	/*-------Get all users------*/
 	@GET
-	@Produces(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_JSON)
 	public User getUsers(){
 		List<User> users = new ArrayList<>();
 		String sql = "select * from users";
