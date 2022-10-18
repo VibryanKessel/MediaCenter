@@ -6,6 +6,7 @@ public class User {
 	private String pseudo;
 	private String firstname;
 	private String lastname;
+	private String password;
 	
 	/*-----------Getters and Setters------------*/
 	
@@ -27,4 +28,10 @@ public class User {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+   public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
