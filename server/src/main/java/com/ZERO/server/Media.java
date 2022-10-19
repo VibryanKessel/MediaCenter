@@ -7,6 +7,13 @@ public class Media {
     private String category;
     private String title;
     private String owner;
+    private String city;
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
     private String author;
     private Integer rate;
     public Integer getId() {

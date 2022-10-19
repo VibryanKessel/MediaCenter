@@ -52,7 +52,8 @@ public class MediasRequests {
                 media.setTitle(rs.getString(3));
                 media.setAuthor(rs.getString(4));
                 media.setOwner(rs.getString(5));
-                media.setRate(rs.getInt(6));
+                media.setCity(rs.getString(6));
+                media.setRate(rs.getInt(7));
                 
                 medias.add(media); 
             }
@@ -70,14 +71,15 @@ public class MediasRequests {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("add")
     public void insert(Media media) {
-        String sql = "insert into media(category,title,author,owner,rate) values (?,?,?,?,?)";
+        String sql = "insert into media(category,title,author,owner,city,rate) values (?,?,?,?,?,?)";
         try {
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1,media.getCategory());
             st.setString(2,media.getTitle());
             st.setString(3,media.getAuthor());
             st.setString(4,media.getOwner());
-            st.setInt(5,media.getRate());
+            st.setString(5,media.getCity());
+            st.setInt(6,media.getRate());
             
             st.executeUpdate();
         }catch(Exception e) {
@@ -91,14 +93,15 @@ public class MediasRequests {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("update/{id}")
     public void insert(@PathParam("id") Integer id, Media media) {
-        String sql = "update media set category = ?, title = ?, author = ?, owner = ?, rate = ? where id = "+"'"+id+"'";
+        String sql = "update media set category = ?, title = ?, author = ?, owner = ?, city = ?, rate = ? where id = "+"'"+id+"'";
         try {
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1,media.getCategory());
             st.setString(2,media.getTitle());
             st.setString(3,media.getAuthor());
             st.setString(4,media.getOwner());
-            st.setInt(5,media.getRate());
+            st.setString(5,media.getCity());
+            st.setInt(6,media.getRate());
             
             st.executeUpdate();
         }catch(Exception e) {
@@ -124,7 +127,8 @@ public class MediasRequests {
                 media.setTitle(rs.getString(3));
                 media.setAuthor(rs.getString(4));
                 media.setOwner(rs.getString(5));
-                media.setRate(rs.getInt(6));    
+                media.setCity(rs.getString(6));
+                media.setRate(rs.getInt(7));    
                 
             }
         }catch(Exception e) {
@@ -153,7 +157,8 @@ public class MediasRequests {
                 media.setTitle(rs.getString(3));
                 media.setAuthor(rs.getString(4));
                 media.setOwner(rs.getString(5));
-                media.setRate(rs.getInt(6));    
+                media.setCity(rs.getString(6));
+                media.setRate(rs.getInt(7));    
                 
                 mediasByCategory.add(media);
             }
@@ -183,7 +188,8 @@ public class MediasRequests {
                 media.setTitle(rs.getString(3));
                 media.setAuthor(rs.getString(4));
                 media.setOwner(rs.getString(5));
-                media.setRate(rs.getInt(6));    
+                media.setCity(rs.getString(6));
+                media.setRate(rs.getInt(7));    
                 
                 mediasByCity.add(media);
             }
@@ -213,7 +219,8 @@ public class MediasRequests {
                 media.setTitle(rs.getString(3));
                 media.setAuthor(rs.getString(4));
                 media.setOwner(rs.getString(5));
-                media.setRate(rs.getInt(6));    
+                media.setCity(rs.getString(6));
+                media.setRate(rs.getInt(7));    
                 
                 mediasByKey.add(media);
             }
