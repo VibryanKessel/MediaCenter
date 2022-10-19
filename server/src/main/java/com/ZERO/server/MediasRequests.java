@@ -62,20 +62,22 @@ public class MediasRequests {
         
         return medias;
     }
+    
+    
     /*----------Insert a media-----------*/
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("add")
     public void insert(Media media) {
-        String sql = "insert into medias values (?,?,?,?,?,?,?)";
+        String sql = "insert into media(category,title,author,owner,rate) values (?,?,?,?,?)";
         try {
             PreparedStatement st = con.prepareStatement(sql);
-            st.setInt(1,media.getId());
-            st.setString(2,media.getCategory());
-            st.setString(3,media.getTitle());
-            st.setString(4,media.getAuthor());
-            st.setString(5,media.getOwner());
-            st.setInt(6,media.getRate());
+            st.setString(1,media.getCategory());
+            st.setString(2,media.getTitle());
+            st.setString(3,media.getAuthor());
+            st.setString(4,media.getOwner());
+            st.setInt(5,media.getRate());
             
             st.executeUpdate();
         }catch(Exception e) {
@@ -226,6 +228,7 @@ public class MediasRequests {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/delete")
     public void delete(Integer id) {
         String sql = "delete from media where id = ?";
         try {

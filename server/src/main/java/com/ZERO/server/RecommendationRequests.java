@@ -17,13 +17,13 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 
-@Path("borrows")
-public class BorrowRequests {
+@Path("recommendations")
+public class RecommendationRequests {
     List<Media> medias;
     
     Connection con = null;
     
-    public BorrowRequests(){
+    public RecommendationRequests(){
         String url = "jdbc:mysql://localhost:8001/mediacenter";
         String Uname = "root";
         String pwd = "";
@@ -35,75 +35,77 @@ public class BorrowRequests {
         }
     }
 
-/*-------Get Borrow of a user------*/
+/*-------Get Recommendations of a user------*/
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("borrower/{pseudo}")
-    public List<Borrow> getBorrows(@PathParam("pseudo") String pseudo){
-        String sql = "select * from borrow where borrower = "+"'"+pseudo+"'";
-        List<Borrow> borrows = new ArrayList<>();
+    @Path("recommender/{pseudo}")
+    public List<Recommendation> getRecommendations(@PathParam("pseudo") String pseudo){
+        String sql = "select * from recommendation where recommender = "+"'"+pseudo+"'";
+        List<Recommendation> recommendations = new ArrayList<>();
         
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
             while(rs.next()) {
-                Borrow borrow = new Borrow();
-                borrow.setIdBorrow(rs.getInt(1));
-                borrow.setBorrower(rs.getString(2));
-                borrow.setIdMedia(rs.getString(3));    
+                Recommendation recommendation = new Recommendation();
+                recommendation.setIdRecommendation(rs.getInt(1));
+                recommendation.setRecommender(rs.getString(2));
+                recommendation.setIdMedia(rs.getInt(3));    
                 
-                borrows.add(borrow);
+                recommendations.add(recommendation);
             }
         }catch(Exception e) {
             System.out.println(e);
         }
         
-        return borrows;
+        return recommendations;
     }
     
-    /*-------Get borrowed medias of a user------*/
+    /*-------Get list of users who recommended a media------*/
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("owner/{pseudo}")
-    public List<Borrow> getLoanedMedias(@PathParam("pseudo") String pseudo){
-        String sql = "select DISTINCT media.* from borrow,media where borrow.idMedia = media.id and media.owner = "+"'"+pseudo+"'";
-        List<Borrow> loanedMedias = new ArrayList<>();
+    @Path("media/{id}")
+    public List<User> getRecommenders(@PathParam("id") Integer id){
+        String sql = "select users.* from users,recommendation where media.id = recommendation.idMedia and media.idMedia = "+"'"+id+"'";
+        List<User> recommenders = new ArrayList<>();
         
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
             while(rs.next()) {
-                Borrow borrow = new Borrow();
-                borrow.setIdBorrow(rs.getInt(1));
-                borrow.setBorrower(rs.getString(2));
-                borrow.setIdMedia(rs.getString(3));    
+                User u = new User();
+                u.setPseudo(rs.getString(1));
+                u.setFirstname(rs.getString(2));
+                u.setLastname(rs.getString(3));
+                u.setPassword(rs.getString(4));
                 
-                loanedMedias.add(borrow);
+                recommenders.add(u);
             }
         }catch(Exception e) {
             System.out.println(e);
         }
         
-        return loanedMedias;
+        return recommenders;
     }
-    /*---------------insert a borrow---------------*/
     
+    /*------insert a recommendation-------------*/
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("add")
-    public void insert(Borrow brw) {
-        String sql = "insert into borrow(borrower,idMedia) values (?,?)";
+    public void insert(Recommendation rcmdt) {
+        String sql = "insert into recommendation(recommender,idMedia) values (?,?)";
         try {
             PreparedStatement st = con.prepareStatement(sql);
-            st.setString(1,brw.getBorrower());
-            st.setString(2,brw.getIdMedia());
+            st.setString(1,rcmdt.getRecommender());
+            st.setInt(2,rcmdt.getIdMedia());
             
             st.executeUpdate();
         }catch(Exception e) {
             System.out.println(e);
         }
     }
+    
 }

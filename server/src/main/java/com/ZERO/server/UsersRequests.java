@@ -88,6 +88,7 @@ public class UsersRequests {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("add")
     public void insert(User user) {
         String sql = "insert into users values (?,?,?,?)";
         try {
