@@ -10,7 +10,7 @@ Les différentes requetes :
 
 GET  /users                       ---------->  get all users
 GET /users/{pseudo}               ---------->  get a User with its pseudo
-POST /users/add with a JSON body  ---------->  insert user
+POST /users/add with a user in body  ---------->  insert user
 
 /*---------------------------MEDIAS------------------------*/
 
@@ -21,6 +21,7 @@ GET /medias/city/{cityName}  -------->   get media by city
 GET /medias/key/{keyword}  -------->   get media by keyword(applied on the title)
 POST /medias/add with a media in body  -----------> insert media
 POST /medias/delete with a media id in body   -------->   delete media
+PUT /medias/update/{idMedia} with the new media in body   -------->   update media
 
 /*---------------------------BORROWS------------------------*/
 
