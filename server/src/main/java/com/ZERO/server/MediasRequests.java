@@ -10,7 +10,8 @@ import java.sql.Statement;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;  
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -81,10 +82,59 @@ public class MediasRequests {
             System.out.println(e);
         }
     }
+    
+    /*----------Update a media-----------*/
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("update/{id}")
+    public void insert(@PathParam("id") Integer id, Media media) {
+        String sql = "update media set category = ?, title = ?, author = ?, owner = ?, rate = ? where id = "+"'"+id+"'";
+        try {
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1,media.getCategory());
+            st.setString(2,media.getTitle());
+            st.setString(3,media.getAuthor());
+            st.setString(4,media.getOwner());
+            st.setInt(5,media.getRate());
+            
+            st.executeUpdate();
+        }catch(Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    /*-------Get Media by id------*/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Media getMediaById(@PathParam("id") Integer id){
+        String sql = "select * from media where id = "+"'"+id+"'";
+        Media media = new Media();
+        
+        try {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            if(rs.next()) {
+                media.setId(rs.getInt(1));
+                media.setCategory(rs.getString(2));
+                media.setTitle(rs.getString(3));
+                media.setAuthor(rs.getString(4));
+                media.setOwner(rs.getString(5));
+                media.setRate(rs.getInt(6));    
+                
+            }
+        }catch(Exception e) {
+            System.out.println(e);
+        }
+        
+        return media;
+    }
+    
     /*-------Filter Media by Category------*/
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
     @Path("category/{category}")
     public List<Media> getMediaByCategory(@PathParam("category") String category){
         String sql = "select * from media where category = "+"'"+category+"'";
@@ -115,7 +165,6 @@ public class MediasRequests {
     /*-------Filter Media by City------*/
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
     @Path("city/{city}")
     public List<Media> getMediaByCity(@PathParam("city") String city){
         String sql = "select * from media where city = "+"'"+city+"'";
@@ -146,7 +195,6 @@ public class MediasRequests {
     /*-------Filter Media by Keyword------*/
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
     @Path("Key/{keyword}")
     public List<Media> getMediaByKeyWord(@PathParam("keyword") String keyword){
         String sql = "select * from media where title LIKE "+"'"+keyword+"%'";
